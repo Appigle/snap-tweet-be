@@ -1,9 +1,9 @@
 name: Deploy to Vercel
 
-on:
-  push:
-    branches:
-      - main # or your default branch
+# on:
+#   push:
+#     branches:
+#       - main # or your default branch
 
 jobs:
   deploy:
