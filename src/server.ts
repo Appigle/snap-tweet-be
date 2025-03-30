@@ -28,7 +28,7 @@ app.use("/api", tweetRoutes);
 //   const PORT: number = parseInt(process.env.PORT || '5000', 10);
 //   app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
 // }
-app.get("/", (req, res) => {
-  res.send("Hello from Express on Vercel!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello from Express on Vercel!");
+// });
 export default app; // Ensure the app is exported for testing
