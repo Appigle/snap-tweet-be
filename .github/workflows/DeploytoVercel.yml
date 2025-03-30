@@ -3,7 +3,7 @@ name: Deploy to Vercel
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main # or your default branch
 
 jobs:
   deploy:
@@ -16,13 +16,21 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Run Tests
+        run: |
+          npm install jest @types/jest ts-jest --save-dev
+          npm test
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          PORT: 5000
+          NODE_ENV: test
 
       - name: Deploy to Vercel
         run: |
           npm install -g vercel
           vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
-
