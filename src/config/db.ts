@@ -1,22 +1,30 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const connectDB = async (): Promise<void> => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI || '');
+const MONGODB_URI = process.env.MONGO_URI || "";
 
-    if (process.env.NODE_ENV !== 'test') {
-      console.log('✅ MongoDB Connected');
-    }
-  } catch (error) {
-    console.error('MongoDB Connection Error:', error);
+if (!MONGODB_URI) {
+  throw new Error("Please define the MONGODB_URI environment variable");
+}
 
-    // Prevent Jest from crashing due to process.exit(1)
-    if (process.env.NODE_ENV !== 'test') {
-      process.exit(1);
-    } else {
-      throw new Error('DB connection failed');
-    }
+let cached = (global as any).mongoose;
+
+if (!cached) {
+  cached = (global as any).mongoose = { conn: null, promise: null };
+}
+
+async function dbConnect() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        bufferCommands: false,
+      })
+      .then((m) => m);
   }
-};
 
-export default connectDB;
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
+
+export default dbConnect;
