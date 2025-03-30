@@ -10,7 +10,13 @@ dotenv.config();
 
 const app: Express = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://delicate-tarsier-b4e7e0.netlify.app",
+    methods: ["GET", "POST", "OPTIONS"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 connectDB(); // Ensure this is mocked in tests
